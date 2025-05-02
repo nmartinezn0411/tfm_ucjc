@@ -26,8 +26,24 @@ class Person:
         self.position = np.array([x, y], dtype=float)
         self.velocity = np.random.rand(2) * MAX_SPEED
         self.radius = PERSON_RADIUS
+        # To follow a certain path
+        self.path_index = 0
+        self.path_threshold = 20  # Distance to consider waypoint reached
+        
+    def follow_path(self, path_waypoints):
+        if self.path_index < len(path_waypoints):
+            target = path_waypoints[self.path_index]
+            direction = target - self.position
+            distance = np.linalg.norm(direction)
+            
+            if distance < self.path_threshold:
+                self.path_index += 1
+            else:
+                self.velocity += direction / distance * 0.1
+
 
     def update(self, people, walls):
+        self.follow_path(path_waypoints)
         # Separation: Avoid crowding local flockmates
         separation = np.zeros(2)
         for other in people:
@@ -64,6 +80,14 @@ class Person:
     def draw(self, screen):
         pygame.draw.circle(screen, RED, self.position.astype(int), self.radius)
 
+# Follow path
+path_waypoints = [
+    np.array([100, 100]),
+    np.array([1700, 100]),
+    np.array([1700, 900]),
+    np.array([100, 900]),
+    np.array([100, 100])  # Loop back to start
+]
 # Create people
 people = [Person(np.random.randint(0, WIDTH), np.random.randint(0, HEIGHT)) for _ in range(NUM_PEOPLE)]
 
