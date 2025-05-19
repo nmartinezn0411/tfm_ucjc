@@ -1,12 +1,10 @@
 Cosas a tomar en cuenta:
 
 - Que se detecte si una persona está infecta o no antes de entrar, hay personas asintomaticas también.
+- Que si se detecta una persona contagiada en el grupo, que simplemente no se deje entrar.
 - Que se regule la cantidad de personas que pueden entrar grupo, es decir, que solo se puede grupo de 2 o 3 personas.
 - Que se regule los movimientos de las personas, es decir, que no se puedan mover solo de manera aleatoria.
 - Que se regule el uso de mascarillas y la distancia que deben de tener las personas entre sí, esto se traduce en el
 radio de infección que puede tener una persona.
-- Que si se detecta una persona contagiada en el grupo, que simplemente no se deje entrar.
-- Que existan espacios donde las personas se pueden mover de manera aleatoria por cierta cantidad de tiempo.
 - Cierta cantidad de personas infectadas son asintomáticas
-
-Se deben de tomar acciones 
+- Que existan espacios donde las personas se pueden mover de manera aleatoria por cierta cantidad de tiempo.
