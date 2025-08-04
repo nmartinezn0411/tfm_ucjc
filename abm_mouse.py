@@ -13,6 +13,7 @@ BORDER_WIDTH = 20  # Width of middle barriers
 AVOID_FORCE = 1 # Strength of obstacle avoidance force
 
 # Colors
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GRAY = (100, 100, 100)
