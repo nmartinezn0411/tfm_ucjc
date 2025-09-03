@@ -13,7 +13,6 @@ from constants import (
     WIDTH, 
     HEIGHT, 
     GROUP_SIZE, 
-    INFECTION_RATE, 
     ASYMPTOMATIC_RATE, 
     BLACK
 )
@@ -31,7 +30,7 @@ from database_configuration import save_simulation_run
 from simulations_lists import walls
 
 # Parameters of the person
-MAX_SPEED = (2, 3.5)
+MAX_SPEED = (1.2, 1.8) # Speed of the person in m/s
 
 # Parameters of the simulation
 NUM_PEOPLE = 10
@@ -49,6 +48,7 @@ DT = 1.0 / TARGET_FPS  # fixed sim step (seconds)
 MAX_RUN_TIME = 30.0  # seconds
 SIMULATION_NAME = "prueba"
 INFECTION_RADIUS = 2 # The simulation radius is in meters
+INFECTION_RATE = 15
 # Pygame setup
 pygame.init()
 
@@ -66,7 +66,10 @@ def run_simulation(
     INFECTION_RADIUS = INFECTION_RADIUS, # Radio de infección, la entrada es en pixeles
     NUM_PEOPLE = NUM_PEOPLE,
     SIMULATION_NAME = SIMULATION_NAME,
+    INFECTION_RATE = INFECTION_RATE,
     ):
+    
+    print(INFECTION_RATE)
     
     INFECTION_RADIUS = INFECTION_RADIUS*20
     
@@ -86,6 +89,10 @@ def run_simulation(
         exposure_time_s = defaultdict(float)  # {susceptible_id: seconds near any infectious}
         exposure_time_per_location = defaultdict(float)  # {(x, y): total_seconds}
         exposure_time_grid = defaultdict(float) # Group exposure times into GRID_NUMBERxGRID_NUMBER pixel buckets
+        # We define the type of people that are in the simulation
+        susceptibles_amount = 0
+        infectious_amount = 0
+        asymptomatic_amount = 0
 
         while running:
             for event in pygame.event.get():
@@ -138,6 +145,13 @@ def run_simulation(
                     y = random.randint(SPAWN_AREA[2], SPAWN_AREA[3])
                     p = Person(x, y, group_path, infected, asymptomatic, speed, INFECTION_RADIUS)
                     people.append(p)
+                    # We add the person in the variable
+                    if infected:
+                        infectious_amount += 1 
+                    elif asymptomatic:
+                        asymptomatic_amount += 1
+                    else:
+                        susceptibles_amount += 1
                 last_spawn_time = sim_time
                 current_spawn_interval = random.uniform(*SPAWN_TIME)
 
@@ -149,8 +163,8 @@ def run_simulation(
                     active_count += 1
                     
             # >>> INSERT ANALYTICS HERE <<<
-            infectious = [p for p in people if (p.infected or p.asymptomatic)]
-            susceptibles = [p for p in people if not p.infected and not p.asymptomatic]
+            infectious = [p for p in people if ((p.infected or p.asymptomatic) and p.active)] # La persona debe encontrarse activa
+            susceptibles = [p for p in people if ((not p.infected and not p.asymptomatic) and p.active)]
 
             if infectious and susceptibles:
                 for s in susceptibles:
@@ -201,25 +215,45 @@ def run_simulation(
                     duration=sim_time,
                     person_exposures=exposure_time_s,
                     location_exposures=filtered_grid,
-                    num_people=len(people)
+                    num_people=len(people),
+                    susceptible=susceptibles_amount,
+                    infectious=infectious_amount,
+                    asymptomatic=asymptomatic_amount,
+                    infection_radius = INFECTION_RADIUS/20,
+                    infected_percentage = INFECTION_RATE*100,
                 )
                 running = False
                 
 # Crear diferentes simulaciones y se guardan en la base de datos
 personas = [10, 20, 30, 40] # Cantidad de personas que se van a simular
-distancias = [1.5, 2.5, 3, 4] # Distancia en metros de la infección
+distancias = [2, 3, 5] # Diametro en metros de la infección
+porcentajes = [0.15, 0.1, 0.05] # Porcentajes de infección
+# Se crean las diferentes simulaciones según los diferentes parametros creados
+for porcentaje in porcentajes:
+    for persona in personas:
+        for distancia in distancias:
+            simulation_name = "test_simulation_p" + str(persona) + "_d" + str(distancia) + "_ir" + str(porcentaje)
+            print("Corriendo simulacion" + simulation_name)
+            run_simulation(
+             60,
+             distancia,
+             persona,
+             simulation_name,
+             porcentaje 
+         )
 
 # Se crean las diferentes simulaciones según los diferentes parametros creados
-for persona in personas:
-    for distancia in distancias:
-        simulation_name = "test_simulation_p" + str(persona) + "_d" + str(distancia)
-        print("Corriendo simulacion" + simulation_name)
-        run_simulation(
-            20,
-            distancia,
-            persona,
-            simulation_name
-        )
+#for persona in personas:
+#    for distancia in distancias:
+#        simulation_name = "test_simulation_p" + str(persona) + "_d" + str(distancia)
+#        print("Corriendo simulacion" + simulation_name)
+#        run_simulation(
+#            20,
+#            distancia,
+#            persona,
+#            simulation_name,
+#            INFECTION_RATE = 0.15 # For this first batch the simulation was 15 %
+#        )
 
 pygame.quit()
 sys.exit()

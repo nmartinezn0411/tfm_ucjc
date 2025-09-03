@@ -32,7 +32,12 @@ class Simulation(Base):
     name = Column(String(255), nullable=True)  # Optional simulation name/description
     duration_seconds = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
-    num_people = Column(Integer, default=0)
+    num_people = Column(Integer, default=0) # Amount of people in the simulation
+    susceptible = Column(Integer, default=0) # Amount of susceptibles people in the simulation
+    infectious = Column(Integer, default=0) # Amount of infectious people in the simulation
+    asymptomatic = Column(Integer, default=0) # Amount of asymptomatic people in the simulation
+    infection_radius = Column(Float, default = 0, nullable=True) # Distance of infection
+    infected_percentage = Column(Integer, default = 0, nullable=True) # Distance of infection
     
     person_exposures = relationship("PersonExposure", back_populates="simulation", cascade="all, delete-orphan")
     location_exposures = relationship("LocationExposure", back_populates="simulation", cascade="all, delete-orphan")
@@ -65,7 +70,17 @@ class LocationExposure(Base):
     exposure_time_seconds = Column(Float, nullable=False)
     
     simulation = relationship("Simulation", back_populates="location_exposures")
-def save_simulation_run(duration, person_exposures, location_exposures, num_people=None, simulation_name=None):
+def save_simulation_run(duration, 
+                        person_exposures, 
+                        location_exposures, 
+                        num_people=None,
+                        susceptible=None, 
+                        infectious=None, 
+                        asymptomatic=None,  
+                        simulation_name=None,
+                        infection_radius = None,  
+                        infected_percentage = None,
+                        ):
     """Save simulation results to database with optional name"""
     session = Session()
     try:
@@ -73,7 +88,12 @@ def save_simulation_run(duration, person_exposures, location_exposures, num_peop
         sim = Simulation(
             name=simulation_name,  # Optional name
             duration_seconds=round(duration, 2),
-            num_people=num_people
+            num_people=num_people,
+            susceptible=susceptible,
+            infectious=infectious,
+            asymptomatic=asymptomatic,
+            infection_radius = infection_radius,
+            infected_percentage = infected_percentage,
         )
         session.add(sim)
         session.flush()
