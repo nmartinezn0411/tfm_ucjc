@@ -42,13 +42,14 @@ SPAWN_TIME = (2000, 10000)
 #  Main simulation loop: run the simulation NUM_RUNS times
 # ---------------------------------------------------------------------#
 NUM_RUNS = 20
-FAST_MODE = True
+FAST_MODE = False
 TARGET_FPS = 5
 DT = 1.0 / TARGET_FPS  # fixed sim step (seconds)
 MAX_RUN_TIME = 30.0  # seconds
 SIMULATION_NAME = "prueba"
 INFECTION_RADIUS = 2 # The simulation radius is in meters
 INFECTION_RATE = 15
+
 # Pygame setup
 pygame.init()
 
@@ -107,31 +108,6 @@ def run_simulation(
                 #dt = clock.tick(TARGET_FPS) / 1000.0  # real-time pacing
             sim_time += dt
             
-            #if sim_time >= MAX_RUN_TIME:
-            #    print(f"Simulation {sim_run+1} reached time limit ({MAX_RUN_TIME:.1f}s)")
-            #    print(f"Simulation {sim_run+1} finished in {sim_time:.2f} s")
-            #    print(f"Exposure time (s) near infectious, by person id: {dict(exposure_time_s)}")
-                # Round the positions by 10
-            #    for (x, y), time in exposure_time_per_location.items():
-            #        x_bucket = round_down(x)  # e.g., 104 → 100, 107 → 100, 111 → 110
-            #        y_bucket = round_down(y)  # e.g., 904 → 900, 905 → 900, 902 → 900
-            #        exposure_time_grid[(x_bucket, y_bucket)] += time
-            #    # Only saves the cases in which the time is bigger than 0.5 seconds
-            #    filtered_grid = {
-            #        (x, y): time 
-            #        for (x, y), time in exposure_time_grid.items() 
-            #        if time > 1.0
-            #    }
-            #    print("Exposure time (s) per location:", dict(filtered_grid))
-            #    print("\n")
-            #    running = False
-            #    
-            #    running = False
-            #    continue  # skip the rest of this frame
-            
-            # --- events (keep tiny to avoid OS “not responding”) ---
-            
-                    
             # --- spawns based on SIM time, not wall time ---
             if (sim_time - last_spawn_time) > (current_spawn_interval / 1000.0) and len(people) < NUM_PEOPLE:
                 #print(f"Spawning with interval: {current_spawn_interval}ms")
@@ -210,18 +186,18 @@ def run_simulation(
                 print("\n")
                 
                 # Save the data of the simulation in the database
-                save_simulation_run(
-                    simulation_name=SIMULATION_NAME,  # Optional name
-                    duration=sim_time,
-                    person_exposures=exposure_time_s,
-                    location_exposures=filtered_grid,
-                    num_people=len(people),
-                    susceptible=susceptibles_amount,
-                    infectious=infectious_amount,
-                    asymptomatic=asymptomatic_amount,
-                    infection_radius = INFECTION_RADIUS/20,
-                    infected_percentage = INFECTION_RATE*100,
-                )
+                #save_simulation_run(
+                #    simulation_name=SIMULATION_NAME,  # Optional name
+                #    duration=sim_time,
+                #    person_exposures=exposure_time_s,
+                #    location_exposures=filtered_grid,
+                #    num_people=len(people),
+                #    susceptible=susceptibles_amount,
+                #    infectious=infectious_amount,
+                #    asymptomatic=asymptomatic_amount,
+                #    infection_radius = INFECTION_RADIUS/20,
+                #    infected_percentage = INFECTION_RATE*100,
+                #)
                 running = False
                 
 # Crear diferentes simulaciones y se guardan en la base de datos
@@ -241,19 +217,6 @@ for porcentaje in porcentajes:
              simulation_name,
              porcentaje 
          )
-
-# Se crean las diferentes simulaciones según los diferentes parametros creados
-#for persona in personas:
-#    for distancia in distancias:
-#        simulation_name = "test_simulation_p" + str(persona) + "_d" + str(distancia)
-#        print("Corriendo simulacion" + simulation_name)
-#        run_simulation(
-#            20,
-#            distancia,
-#            persona,
-#            simulation_name,
-#            INFECTION_RATE = 0.15 # For this first batch the simulation was 15 %
-#        )
-
+            
 pygame.quit()
 sys.exit()

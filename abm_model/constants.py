@@ -1,7 +1,7 @@
 '''
 constants.py 
 En este archivo se definen todas las constantes que existen en el proyecto.
-Estas constantes se encuentran explicadas
+Estas constantes se encuentran explicadas en la documnetación del proyecto.
 
 Se debe tomar en cuenta que cada 100 pixeles son 5 metros
 '''

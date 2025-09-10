@@ -1,29 +1,14 @@
-Cosas a tomar en cuenta:
+Algunos de los aspectos esenciales que se toman en cuenta en la simulación.
 
 - Que se detecte si una persona está infecta o no antes de entrar, hay personas asintomaticas también.
-- Que si se detecta una persona contagiada en el grupo, que simplemente no se deje entrar.
-- Que se regule la cantidad de personas que pueden entrar grupo, es decir, que solo se puede grupo de 2 o 3 personas.
-- Que se regule los movimientos de las personas, es decir, que no se puedan mover solo de manera aleatoria.
+- Que se regule la cantidad de personas que pueden entrar, solo puede entrar una persona a la vez.
 - Que se regule el uso de mascarillas y la distancia que deben de tener las personas entre sí, esto se traduce en el
 radio de infección que puede tener una persona.
 - Cierta cantidad de personas infectadas son asintomáticas
 - Que existan espacios donde las personas se pueden mover de manera aleatoria por cierta cantidad de tiempo.
 - Que se cambie el radio de infección de la enfermedad, que una enfermedad con un radio más grande
 contagie más fácil y vicerversa.
-
-
-con alguna cantidad de tiempo que la persona se encuentre en el radio de infección de una person
-asintomatica o infectada, una persona suceptible puede enfermarse. Esta distancia simula la 
-probabilidad que tiene una persona de enfermarse estando cerca de una persona infectada 
-por medio de un saludo de mano, estornudo, contacto de alguna superficie que una persona 
-infectada haya tocado. 
-
-
-Comprobación de vacunación o inmunidad, que hayan agentes que sean inmunes a la enfermedad, estos no podrán ser contagiados. 
-Tiempo de exposición y duración del contacto, mientras más tiempo una persona contagiada dure cerca de otra, más probable será que se contagie.
-Rutas predefinidas. Algunos gentes serán simulados como personas del evento, y podrán moverse con algún patrón definido, en momentos pico de la epidemia, estas personas se quedarán en una sola posición.
-Grupos familiares o burbujas sociales
-Presencia de personal sanitario, existan personas que supervisen que se cumplen las reglas propuestas.
-Regular la cantidad de personas que entran y salen del espacio.
-Temperatura ambiental o ventilación del espacio. El riesgo es más grande en espacios cerrados. 
-Cumplimiento parcial de reglas (compliance). Algunas personas que no cumplen con el distanciamienot social y otras reglas propuestas.
+- Tiempo de exposición y duración del contacto, mientras más tiempo una persona contagiada dure cerca de otra, más probable será que se contagie.
+- Regular la cantidad de personas que entran y salen del espacio.
+- Temperatura ambiental o ventilación del espacio. El riesgo es más grande en espacios cerrados. 
+- Cumplimiento parcial de reglas (compliance). Algunas personas que no cumplen con el distanciamienot social y otras reglas propuestas.
